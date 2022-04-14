@@ -23,25 +23,22 @@ class IFunction
 	std::vector<EType> m_arguments{ };
 };
 
-class CUserDefinedFunction final : public IFunction
+class IGetterFunction : public IFunction
 {
-	public:
-	CUserDefinedFunction( ) = default;
-	CUserDefinedFunction( EType type, std::vector<EType> &&arguments );
-	~CUserDefinedFunction( ) override = default;
-
-	std::string get( ) override;
+	protected:
+	std::ptrdiff_t m_ptrDiff{ };
 };
 
-class CGetterFunction final : public IFunction
+class IVirtualTableFunction : public IFunction
 {
 	public:
-	CGetterFunction( ) = default;
-	CGetterFunction( EType type, std::vector<EType> &&arguments, std::ptrdiff_t ptrDiff );
-	~CGetterFunction( ) override = default;
+	enum ECallingConvention
+	{
+		Thiscall,
+		Cdecl
+	};
 
-	std::string get( ) override;
-
-	private:
-	std::ptrdiff_t m_ptrDiff;
+	protected:
+	std::uint32_t m_index{ };
+	ECallingConvention m_callingConvention{ };
 };

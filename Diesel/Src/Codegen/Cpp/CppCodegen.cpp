@@ -1,4 +1,4 @@
-#include "../Codegen.h"
+#include "CppCodegen.h"
 
 #include <optional>
 
@@ -6,11 +6,6 @@ namespace detail
 {
 	constexpr static char const *kCodeExtension = ".cpp";
 	constexpr static char const *kHeaderExtension = ".h";
-	constexpr static char const *kType[ kMax ] ={
-		"void",
-		"bool",
-		"int"
-	};
 }
 
 CCppCodegen::CCppCodegen( std::ifstream &&fileHandle, bool headerGuard, bool splitFiles )
@@ -82,7 +77,7 @@ void CCppCodegen::processData( )
 	{
 		stream <<
 			// Declare prototype
-			detail::kType[ fn->m_returnType ] << ' ' << ( className ? ( className.value( ) + "::" ) : "" ) << functionName << '(';
+			kTypeCpp[ fn->m_returnType ] << ' ' << ( className ? ( className.value( ) + "::" ) : "" ) << functionName << '(';
 
 		// NOTE: ugly... wow...
 		for( auto i = 0; i < fn->m_arguments.size( ); ++i )
@@ -90,10 +85,10 @@ void CCppCodegen::processData( )
 			// If className => code stream
 			if( className )
 				// Write arg. list and name arguments
-				stream << detail::kType[ fn->m_arguments[ i ] ] << "arg" << i << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
+				stream << kTypeCpp[ fn->m_arguments[ i ] ] << " arg" << i << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
 			else
 				// Write arg. list and don't name arguments
-				stream << detail::kType[ fn->m_arguments[ i ] ] << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
+				stream << kTypeCpp[ fn->m_arguments[ i ] ] << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
 		}
 
 		stream << ')';
@@ -108,9 +103,13 @@ void CCppCodegen::processData( )
 		for( auto const &[fnName, fn] : interf.m_functions )
 		{
 			bool skip = false;
-			skip = skip || ( dynamic_cast< CGetterFunction * >( fn.get( ) ) // verify if class is CGetterFunction by RTTI
+			skip = skip || std::ranges::any_of( fn->m_arguments, [ ]( auto const &v )
+			{
+				return v == kVoid; // we can't have void arguments for obvious reason....
+			} );
+			skip = skip || ( dynamic_cast< IGetterFunction * >( fn.get( ) ) // verify if class is IGetterFunction by RTTI
 							 // yes = dynamic_cast works, nay = returns nullptr => short circuit
-							 && ( fn->m_arguments.size( ) > 0 || fn->m_returnType == kVoid ) );
+							 && fn->m_arguments.size( ) > 0 /* getters don't need arguments */ );
 
 			if( skip )
 			{
