@@ -222,6 +222,7 @@ namespace cl
 		size_t /*num chars read*/ get_int( std::string *p_num );
 		size_t /*num chars read*/ read_int( std::string *p_num );
 		size_t /*num chars read*/ get_int( int *p_int );
+		size_t /*num chars read*/ get_llong( long long *p_int );
 		size_t /*num chars read*/ get_uint( std::string *p_num );
 		size_t /*num chars read*/ read_uint( std::string *p_num );
 		size_t /*num chars read*/ get_uint( unsigned int *p_int );

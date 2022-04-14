@@ -50,7 +50,6 @@ CParser::CParser( ICodegen const *self, std::ifstream &stream )
 							for( auto const view : std::views::all( sub ) | std::views::split( std::string{ "," } ) )
 							{
 								auto str = std::string( view.begin( ), view.end( ) );
-								std::cout << str << std::endl;
 								// Instantiate a parser on the substring 
 								cl::reader_string subReaderString( str );
 								cl::dsl_pa subParser( subReaderString );
@@ -59,10 +58,10 @@ CParser::CParser( ICodegen const *self, std::ifstream &stream )
 									( ( ( subParser.fixed( "base" ) && subParser.opt_space( ) &&
 									subParser.is_get_char( '=' ) && subParser.opt_space( ) && subParser.get_uint( ( unsigned int * )&base ) ) ) ||
 									( ( subParser.fixed( "ptrdiff" ) && subParser.opt_space( ) &&
-									subParser.is_get_char( '=' ) && subParser.opt_space( ) && subParser.get_int( ( int * )&ptrdiff ) ) ) ) )
+									subParser.is_get_char( '=' ) && subParser.opt_space( ) && subParser.get_llong( &ptrdiff ) ) ) ) )
 								{
-									std::cout << "base: " << std::hex << base <<
-										' ' << "diff: " << std::hex << ptrdiff << std::endl;
+									std::cout << "base: " << base <<
+										' ' << "diff: " << ptrdiff << std::endl;
 								}
 							}
 						}

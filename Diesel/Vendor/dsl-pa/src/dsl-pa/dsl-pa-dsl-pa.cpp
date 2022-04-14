@@ -39,6 +39,7 @@
 #include "../../include/dsl-pa/dsl-pa-dsl-pa.h"
 
 #include <sstream>
+#include <iostream>
 
 namespace cl
 {
@@ -197,12 +198,30 @@ namespace cl
 		return n_digits + n_sign_chars;
 	}
 
+
 	size_t /*num chars read*/ dsl_pa::get_int( int *p_int )
 	{
 		std::string input;
 		size_t n_read = read_int( &input );
 		if( n_read > 0 )
 			*p_int = atoi( input.c_str( ) );
+
+		return n_read;
+	}
+
+	size_t /*num chars read*/ dsl_pa::get_llong( long long *p_int )
+	{
+		std::string input;
+		size_t n_read = read_int( &input );
+		if( n_read > 0 )
+		{
+			bool negate = false;
+			if( input.starts_with( "-" ) )
+				input = input.substr( ( size_t )( negate = 1 ) );
+			std::cout << input;
+			*p_int = atoll( input.c_str( ) );
+			*p_int *= ( negate ? -1 : 1 );
+		}
 		return n_read;
 	}
 
