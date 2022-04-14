@@ -18,8 +18,8 @@ class CCppCodegen final : public ICodegen
 		kCode
 	};
 
-	CInterface &openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base = 0 ) override;
-	void saveFiles( std::string &&moduleName, std::filesystem::path const &to ) override;
+	CInterface &openInterface( std::string const &name, std::ptrdiff_t ptrDiff, std::uintptr_t base = 0 ) override;
+	void saveFiles( std::string const &moduleName, std::filesystem::path const &to ) override;
 
 	private:
 	/// <summary>

@@ -18,12 +18,12 @@ CCppCodegen::CCppCodegen( std::filesystem::path const &path, bool headerGuard, b
 	( void )parse;
 }
 
-CInterface &CCppCodegen::openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base )
+CInterface &CCppCodegen::openInterface( std::string const &name, std::ptrdiff_t ptrDiff, std::uintptr_t base )
 {
-	return ICodegen::openInterface( std::move( name ), ptrDiff, base );
+	return ICodegen::openInterface( name, ptrDiff, base );
 }
 
-void CCppCodegen::saveFiles( std::string &&moduleName, std::filesystem::path const &to )
+void CCppCodegen::saveFiles( std::string const &moduleName, std::filesystem::path const &to )
 {
 	// Prepare code buffers
 	processData( );

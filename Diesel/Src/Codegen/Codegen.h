@@ -25,9 +25,9 @@ class ICodegen
 	/// <param name="name"></param>
 	/// <param name="ptrDiff"></param>
 	/// <param name="base"></param>
-	virtual CInterface &openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base = 0 )
+	virtual CInterface &openInterface( std::string const &name, std::ptrdiff_t ptrDiff, std::uintptr_t base = 0 )
 	{
-		return m_interfaces[ name ] = std::move( CInterface( std::move( name ), base, ptrDiff ) );
+		return m_interfaces[ name ] = CInterface( name, base, ptrDiff );
 	}
 
 	void writeInterface( std::string const &name, CInterface &&interf )
@@ -40,7 +40,7 @@ class ICodegen
 	/// </summary>
 	/// <param name="moduleName"></param>
 	/// <param name="to"></param>
-	virtual void saveFiles( std::string &&moduleName, std::filesystem::path const &to ) = 0;
+	virtual void saveFiles( std::string const &moduleName, std::filesystem::path const &to ) = 0;
 
 	protected:
 	std::unordered_map<File_t, std::stringstream> m_codeBuf{ };

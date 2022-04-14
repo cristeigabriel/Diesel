@@ -2,10 +2,18 @@
 #define TEST_H
 #include <cstdint>
 
-class  {
+class testClass {
 public:
-	inline static * get(std::uintptr_t base) { 
-		return (*)(base + (-3689348814741910324));
+	inline static testClass* get() {
+		return (testClass*)(6);
+	}
+	void func(bool, int);
+	int& new_func();
+};
+class testClassNew {
+public:
+	inline static testClassNew* get(std::uintptr_t base) { 
+		return (testClassNew*)(base + (24));
 	}
 	void func(bool, int);
 	int& new_func();

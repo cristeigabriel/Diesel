@@ -11,7 +11,7 @@ class CInterface final
 {
 	public:
 	CInterface( ) = default;
-	CInterface( std::string &&name, std::uintptr_t base, std::ptrdiff_t ptrDiff );
+	CInterface( std::string const &name, std::uintptr_t base, std::ptrdiff_t ptrDiff );
 	~CInterface( ) = default;
 
 	template <typename T, typename... Args>
