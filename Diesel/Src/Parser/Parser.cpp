@@ -12,13 +12,13 @@ CParser::CParser( ICodegen const *self, std::ifstream &stream )
 	str << stream.rdbuf( );
 	while( !m_error && std::getline( str, line ) )
 	{
-		if( line.empty( ) || !std::ranges::any_of( line, [ ]( auto c )
+		if( line.empty( ) || std::ranges::all_of( line, [ ]( auto c )
 		{
 			return iswspace( c );
 		} ) )
 			continue;
 
-		bool error = false;
+		bool error = true;
 
 		cl::reader_string readerString( line );
 		cl::dsl_pa parser( readerString );
