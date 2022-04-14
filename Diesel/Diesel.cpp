@@ -2,7 +2,7 @@
 
 int main( )
 {
-	auto diesel = std::make_unique<CCppCodegen>( std::ifstream( ), true, false );
+	auto diesel = std::make_unique<CCppCodegen>( std::ifstream( ), true, true );
 
 	auto &interf = diesel->openInterface( "testClass" );
 	using args = std::vector<EType>;

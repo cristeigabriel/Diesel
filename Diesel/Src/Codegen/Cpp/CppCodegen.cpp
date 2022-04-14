@@ -17,9 +17,7 @@ CCppCodegen::CCppCodegen( std::ifstream &&fileHandle, bool headerGuard, bool spl
 	: m_fileHandle( std::move( fileHandle ) ), m_headerGuard( headerGuard ), m_splitFiles( splitFiles )
 {
 	m_codeBuf.emplace( kHeader, std::stringstream{} );
-
-	if( m_splitFiles )
-		m_codeBuf.emplace( kCode, std::stringstream{} );
+	m_codeBuf.emplace( kCode, std::stringstream{} );
 }
 
 CInterface &CCppCodegen::openInterface( std::string const &name )
