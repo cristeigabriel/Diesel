@@ -37,7 +37,7 @@ class ICodegen
 
 	protected:
 	std::unordered_map<File_t, std::stringstream> m_codeBuf{ };
-	std::unordered_map<std::string, CInterface> m_interfaces{ };
+	std::map<std::string, CInterface> m_interfaces{ };
 };
 
 class CCppCodegen final : public ICodegen

@@ -128,11 +128,11 @@ void CCppCodegen::processData( )
 				writePrototype( code, fnName, fn, className );
 				code << " {" << std::endl
 					<< '\t' << string << std::endl
-					<< '}';
+					<< '}' << std::endl;
 			}
 		}
 
 		// Close class
-		header << "};";
+		header << "};" << std::endl;
 	}
 }
