@@ -23,9 +23,15 @@ class ICodegen
 	/// Declare a container generically
 	/// </summary>
 	/// <param name="name"></param>
-	virtual CInterface &openInterface( std::string const &name )
+	/// <param name="ptrDiff"></param>
+	/// <param name="base"></param>
+	virtual CInterface &openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base = 0 )
 	{
-		return m_interfaces[ name ];
+		auto &handle = m_interfaces[ name ];
+		handle.m_name = std::move( name );
+		handle.m_ptrDiff = ptrDiff;
+		handle.m_base = base;
+		return handle;
 	}
 
 	/// <summary>
@@ -33,7 +39,7 @@ class ICodegen
 	/// </summary>
 	/// <param name="moduleName"></param>
 	/// <param name="to"></param>
-	virtual void saveFiles( std::string const &moduleName, std::filesystem::path const &to ) = 0;
+	virtual void saveFiles( std::string &&moduleName, std::filesystem::path const &to ) = 0;
 
 	protected:
 	std::unordered_map<File_t, std::stringstream> m_codeBuf{ };

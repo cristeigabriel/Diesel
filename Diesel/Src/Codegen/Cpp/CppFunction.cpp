@@ -29,7 +29,7 @@ CCppGetterFunction::CCppGetterFunction( EType type, std::vector<EType> &&argumen
 std::string CCppGetterFunction::get( )
 {
 	// Arithmetic from base plus offset (may be positive or negative)
-	return std::format( "return (((std::uintptr_t)this) + {});", m_ptrDiff );
+	return std::format( "return *({}*)(((std::uintptr_t)this) + {});", kTypeCpp[ m_returnType ], m_ptrDiff );
 }
 
 CCppVirtualTableFunction::CCppVirtualTableFunction( EType type, std::vector<EType> &&arguments, ECallingConvention callingConvention, std::uint32_t index )

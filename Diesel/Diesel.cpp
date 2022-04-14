@@ -5,13 +5,13 @@ int main( )
 	auto diesel = std::make_unique<CCppCodegen>( std::ifstream( ), true, true );
 
 	using args = std::vector<EType>;
-	auto &interf = diesel->openInterface( "testClass" );
+	auto &interf = diesel->openInterface( "testClass", 3, 3 );
 	interf.pushFunction<CCppUserDefinedFunction>( "func", kVoid, args{ kBool, kInt } );
 	interf.pushFunction<CCppGetterFunction>( "new_func", kInt, args{ }, 0x0 );
 	interf.pushFunction<CCppGetterFunction>( "hopefully_skipped", kInt, args{ kInt }, 0x0 );
 
 	{
-		auto &interf = diesel->openInterface( "testClassNew" );
+		auto &interf = diesel->openInterface( "testClassNew", 24 );
 		interf.pushFunction<CCppUserDefinedFunction>( "func", kVoid, args{ kBool, kInt } );
 		interf.pushFunction<CCppGetterFunction>( "new_func", kInt, args{ }, 0x0 );
 		interf.pushFunction<CCppGetterFunction>( "hopefully_skipped", kInt, args{ kInt }, 0x0 );

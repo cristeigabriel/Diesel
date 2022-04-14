@@ -15,12 +15,12 @@ CCppCodegen::CCppCodegen( std::ifstream &&fileHandle, bool headerGuard, bool spl
 	m_codeBuf.emplace( kCode, std::stringstream{} );
 }
 
-CInterface &CCppCodegen::openInterface( std::string const &name )
+CInterface &CCppCodegen::openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base )
 {
-	return ICodegen::openInterface( name );
+	return ICodegen::openInterface( std::move( name ), ptrDiff, base );
 }
 
-void CCppCodegen::saveFiles( std::string const &moduleName, std::filesystem::path const &to )
+void CCppCodegen::saveFiles( std::string &&moduleName, std::filesystem::path const &to )
 {
 	// Prepare code buffers
 	processData( );
@@ -75,9 +75,10 @@ void CCppCodegen::processData( )
 
 	auto writePrototype = [ ]( std::stringstream &stream, std::string const &functionName, std::unique_ptr<IFunction> const &fn, std::optional<std::string> className = std::nullopt )
 	{
+		bool ref = ( ( dynamic_cast< CCppGetterFunction * >( fn.get( ) ) ) != nullptr );
 		stream <<
 			// Declare prototype
-			kTypeCpp[ fn->m_returnType ] << ' ' << ( className ? ( className.value( ) + "::" ) : "" ) << functionName << '(';
+			kTypeCpp[ fn->m_returnType ] << ( ref ? "& " : " " ) << ( className ? ( className.value( ) + "::" ) : "" ) << functionName << '(';
 
 		// NOTE: ugly... wow...
 		for( auto i = 0; i < fn->m_arguments.size( ); ++i )
@@ -99,6 +100,27 @@ void CCppCodegen::processData( )
 		// Open class
 		header << "class " << className << " {" << std::endl
 			<< "public:" << std::endl;
+
+		// Declare getter
+		bool hasGetter = interf.m_ptrDiff != 0;
+		if( hasGetter )
+		{
+			header << '\t';
+
+			bool requiresArg = interf.m_base == 0;
+			if( requiresArg )
+			{
+				header << "inline static " << className << "* get(std::uintptr_t base) { " << std::endl
+					<< "\t\treturn (" << className << "*)(base + (" << interf.m_ptrDiff << "));" << std::endl
+					<< "\t}" << std::endl;
+			}
+			else
+			{
+				header << "inline static " << className << "* get() {" << std::endl
+					<< "\t\treturn (" << className << "*)(" << interf.m_ptrDiff + interf.m_base << ");" << std::endl
+					<< "\t}" << std::endl;
+			}
+		}
 
 		for( auto const &[fnName, fn] : interf.m_functions )
 		{
