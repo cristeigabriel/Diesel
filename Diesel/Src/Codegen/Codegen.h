@@ -27,11 +27,12 @@ class ICodegen
 	/// <param name="base"></param>
 	virtual CInterface &openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base = 0 )
 	{
-		auto &handle = m_interfaces[ name ];
-		handle.m_name = std::move( name );
-		handle.m_ptrDiff = ptrDiff;
-		handle.m_base = base;
-		return handle;
+		return m_interfaces[ name ] = std::move( CInterface( std::move( name ), base, ptrDiff ) );
+	}
+
+	void writeInterface( std::string const &name, CInterface &&interf )
+	{
+		m_interfaces[ name ] = std::move( interf );
 	}
 
 	/// <summary>

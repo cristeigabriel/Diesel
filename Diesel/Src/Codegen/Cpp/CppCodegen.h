@@ -7,7 +7,7 @@ class CCppCodegen final : public ICodegen
 {
 	public:
 	CCppCodegen( ) = default;
-	CCppCodegen( std::ifstream &&fileHandle, bool headerGuard, bool splitFiles );
+	CCppCodegen( std::filesystem::path const &path, bool headerGuard, bool splitFiles );
 	~CCppCodegen( ) override = default;
 
 	enum EFileType : File_t

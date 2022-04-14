@@ -1,8 +1,8 @@
 #include "Src/Codegen/Cpp/CppCodegen.h"
-
+#include <iostream>
 int main( )
 {
-	auto diesel = std::make_unique<CCppCodegen>( std::ifstream( ), true, true );
+	auto diesel = std::make_unique<CCppCodegen>( "E:\\text.txt", true, true );
 
 	using args = std::vector<EType>;
 	auto &interf = diesel->openInterface( "testClass", 3, 3 );

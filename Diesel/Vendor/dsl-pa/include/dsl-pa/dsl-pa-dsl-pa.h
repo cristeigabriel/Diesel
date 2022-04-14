@@ -207,6 +207,11 @@ namespace cl
 		{
 			return optional( wsp( ) );
 		}
+		size_t chr( char c );
+		bool opt_chr( char c )
+		{
+			return optional( chr( c ) );
+		}
 
 		bool /*is_not_eof*/ get_char( std::string *p_input );
 		bool /*is_not_eof*/ read_char( std::string *p_input );

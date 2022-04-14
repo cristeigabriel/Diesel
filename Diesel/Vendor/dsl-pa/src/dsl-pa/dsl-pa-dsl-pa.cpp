@@ -128,6 +128,16 @@ namespace cl
 		return n_spaces;
 	}
 
+
+	size_t dsl_pa::chr( char c )
+	{
+		bool result = get( ) == c;
+
+		unget( );
+
+		return result;
+	}
+
 	bool /*is_not_eof*/ dsl_pa::get_char( std::string *p_input )
 	{
 		p_input->clear( );

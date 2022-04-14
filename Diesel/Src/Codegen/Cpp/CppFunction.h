@@ -8,11 +8,10 @@ constexpr static char const *kTypeCpp[ kMax ] ={
 	"int"
 };
 
-class CCppUserDefinedFunction : public IFunction
+class CCppUserDefinedFunction : public IUserDefinedFunction
 {
 	public:
-	CCppUserDefinedFunction( ) = default;
-	CCppUserDefinedFunction( EType type, std::vector<EType> &&arguments );
+	using IUserDefinedFunction::IUserDefinedFunction;
 	~CCppUserDefinedFunction( ) override = default;
 
 	std::string get( ) override;
@@ -21,8 +20,7 @@ class CCppUserDefinedFunction : public IFunction
 class CCppGetterFunction : public IGetterFunction
 {
 	public:
-	CCppGetterFunction( ) = default;
-	CCppGetterFunction( EType type, std::vector<EType> &&arguments, std::ptrdiff_t ptrDiff );
+	using IGetterFunction::IGetterFunction;
 	~CCppGetterFunction( ) override = default;
 
 	std::string get( ) override;
@@ -31,8 +29,7 @@ class CCppGetterFunction : public IGetterFunction
 class CCppVirtualTableFunction : public IVirtualTableFunction
 {
 	public:
-	CCppVirtualTableFunction( ) = default;
-	CCppVirtualTableFunction( EType type, std::vector<EType> &&arguments, ECallingConvention callingConvention, std::uint32_t index );
+	using IVirtualTableFunction::IVirtualTableFunction;
 	~CCppVirtualTableFunction( ) override = default;
 
 	std::string get( ) override;

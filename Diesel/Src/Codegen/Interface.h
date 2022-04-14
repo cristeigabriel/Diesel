@@ -28,7 +28,7 @@ class CInterface final
 	/// </summary>
 	std::ptrdiff_t m_ptrDiff{ };
 
-	std::map<std::string, std::unique_ptr<IFunction>> m_functions{ };
+	std::map<std::string, std::shared_ptr<IFunction>> m_functions{ };
 };
 
 #include "Interface.inl"

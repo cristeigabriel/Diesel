@@ -1,5 +1,5 @@
 #include "CppCodegen.h"
-
+#include "../../Parser/Parser.h"
 #include <optional>
 
 namespace detail
@@ -8,11 +8,14 @@ namespace detail
 	constexpr static char const *kHeaderExtension = ".h";
 }
 
-CCppCodegen::CCppCodegen( std::ifstream &&fileHandle, bool headerGuard, bool splitFiles )
-	: m_fileHandle( std::move( fileHandle ) ), m_headerGuard( headerGuard ), m_splitFiles( splitFiles )
+CCppCodegen::CCppCodegen( std::filesystem::path const &path, bool headerGuard, bool splitFiles )
+	: m_fileHandle( path, std::ifstream::in ), m_headerGuard( headerGuard ), m_splitFiles( splitFiles )
 {
 	m_codeBuf.emplace( kHeader, std::stringstream{} );
 	m_codeBuf.emplace( kCode, std::stringstream{} );
+
+	CParser parse( this, m_fileHandle );
+	( void )parse;
 }
 
 CInterface &CCppCodegen::openInterface( std::string &&name, std::ptrdiff_t ptrDiff, std::uintptr_t base )
@@ -73,7 +76,7 @@ void CCppCodegen::processData( )
 	auto &header = m_codeBuf[ kHeader ];
 	auto &code = m_codeBuf[ kCode ];
 
-	auto writePrototype = [ ]( std::stringstream &stream, std::string const &functionName, std::unique_ptr<IFunction> const &fn, std::optional<std::string> className = std::nullopt )
+	auto writePrototype = [ ]( std::stringstream &stream, std::string const &functionName, std::shared_ptr<IFunction> const &fn, std::optional<std::string> className = std::nullopt )
 	{
 		bool ref = ( ( dynamic_cast< CCppGetterFunction * >( fn.get( ) ) ) != nullptr );
 		stream <<

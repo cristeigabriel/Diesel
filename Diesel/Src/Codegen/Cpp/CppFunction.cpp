@@ -8,36 +8,15 @@ constexpr static char const *kCallingConvention[ ] =
 	"__cdecl"
 };
 
-CCppUserDefinedFunction::CCppUserDefinedFunction( EType type, std::vector<EType> &&arguments )
-{
-	m_returnType = type;
-	m_arguments = std::move( arguments );
-}
-
 std::string CCppUserDefinedFunction::get( )
 {
 	return std::string{ };
-}
-
-CCppGetterFunction::CCppGetterFunction( EType type, std::vector<EType> &&arguments, std::ptrdiff_t ptrDiff )
-{
-	m_returnType = type;
-	m_arguments = std::move( arguments );
-	m_ptrDiff = ptrDiff;
 }
 
 std::string CCppGetterFunction::get( )
 {
 	// Arithmetic from base plus offset (may be positive or negative)
 	return std::format( "return *({}*)(((std::uintptr_t)this) + {});", kTypeCpp[ m_returnType ], m_ptrDiff );
-}
-
-CCppVirtualTableFunction::CCppVirtualTableFunction( EType type, std::vector<EType> &&arguments, ECallingConvention callingConvention, std::uint32_t index )
-{
-	m_returnType = type;
-	m_arguments = std::move( arguments );
-	m_callingConvention = callingConvention;
-	m_index = index;
 }
 
 std::string CCppVirtualTableFunction::get( )

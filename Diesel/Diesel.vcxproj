@@ -146,6 +146,7 @@
     <ClCompile Include="Src\Codegen\Cpp\CppFunction.cpp" />
     <ClCompile Include="Src\Codegen\Function.cpp" />
     <ClCompile Include="Src\Codegen\Interface.cpp" />
+    <ClCompile Include="Src\Parser\Parser.cpp" />
     <ClCompile Include="Src\Shared\Typesys.cpp" />
     <ClCompile Include="Vendor\dsl-pa\src\dsl-pa\dsl-pa-alphabet.cpp" />
     <ClCompile Include="Vendor\dsl-pa\src\dsl-pa\dsl-pa-dsl-pa.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Src\Codegen\Cpp\CppFunction.h" />
     <ClInclude Include="Src\Codegen\Function.h" />
     <ClInclude Include="Src\Codegen\Interface.h" />
+    <ClInclude Include="Src\Parser\Parser.h" />
     <ClInclude Include="Src\Shared\Typesys.h" />
     <ClInclude Include="Vendor\dsl-pa\include\cl-utils\history-buffer.h" />
     <ClInclude Include="Vendor\dsl-pa\include\dsl-pa\dsl-pa-alphabet.h" />
