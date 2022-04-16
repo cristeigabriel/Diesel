@@ -78,10 +78,9 @@ void CCppCodegen::processData( )
 
 	auto writePrototype = [ ]( std::stringstream &stream, std::string const &functionName, std::shared_ptr<IFunction> const &fn, std::optional<std::string> className = std::nullopt )
 	{
-		bool ref = ( ( dynamic_cast< CCppGetterFunction * >( fn.get( ) ) ) != nullptr );
 		stream <<
 			// Declare prototype
-			kTypeCpp[ fn->m_returnType ] << ( ref ? "& " : " " ) << ( className ? ( className.value( ) + "::" ) : "" ) << functionName << '(';
+			fn->m_returnType->get( ) << ' ' << ( className ? ( className.value( ) + "::" ) : "" ) << functionName << '(';
 
 		// NOTE: ugly... wow...
 		for( auto i = 0; i < fn->m_arguments.size( ); ++i )
@@ -89,10 +88,10 @@ void CCppCodegen::processData( )
 			// If className => code stream
 			if( className )
 				// Write arg. list and name arguments
-				stream << kTypeCpp[ fn->m_arguments[ i ] ] << " arg" << i << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
+				stream << fn->m_arguments[ i ]->get( ) << " arg" << i << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
 			else
 				// Write arg. list and don't name arguments
-				stream << kTypeCpp[ fn->m_arguments[ i ] ] << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
+				stream << fn->m_arguments[ i ]->get( ) << ( ( i != ( fn->m_arguments.size( ) - 1 ) ) ? ", " : "" );
 		}
 
 		stream << ')';
@@ -130,9 +129,10 @@ void CCppCodegen::processData( )
 			bool skip = false;
 			skip = skip || std::ranges::any_of( fn->m_arguments, [ ]( auto const &v )
 			{
-				return v == kVoid; // we can't have void arguments for obvious reason....
+				return ( v->m_type == kVoid && !v->m_indirection ) || v->get( ).empty( ); // we can't have void arguments for obvious reason
+				// also no empty getter
 			} );
-			skip = skip || ( dynamic_cast< IGetterFunction * >( fn.get( ) ) // verify if class is IGetterFunction by RTTI
+			skip = skip || ( dynamic_cast< CCppGetterFunction * >( fn.get( ) ) // verify if class is CCppGetterFunction by RTTI
 							 // yes = dynamic_cast works, nay = returns nullptr => short circuit
 							 && fn->m_arguments.size( ) > 0 /* getters don't need arguments */ );
 

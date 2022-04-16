@@ -14,7 +14,7 @@ class CInterface final
 	CInterface( std::string const &name, std::uintptr_t base, std::ptrdiff_t ptrDiff );
 	~CInterface( ) = default;
 
-	template <typename T, typename... Args>
+	template <class T, class... Args>
 	void pushFunction( std::string const &name, Args&&... args );
 
 	public:

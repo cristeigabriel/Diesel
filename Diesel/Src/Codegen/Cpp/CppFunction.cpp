@@ -8,6 +8,12 @@ constexpr static char const *kCallingConvention[ ] =
 	"__cdecl"
 };
 
+CCppUserDefinedFunction::CCppUserDefinedFunction( std::shared_ptr<IType> &&type, std::vector<std::shared_ptr<IType>> &&arguments )
+{
+	m_returnType = std::move( type );
+	m_arguments = std::move( arguments );
+}
+
 std::string CCppUserDefinedFunction::get( )
 {
 	return std::string{ };
@@ -16,7 +22,7 @@ std::string CCppUserDefinedFunction::get( )
 std::string CCppGetterFunction::get( )
 {
 	// Arithmetic from base plus offset (may be positive or negative)
-	return std::format( "return *({}*)(((std::uintptr_t)this) + {});", kTypeCpp[ m_returnType ], m_ptrDiff );
+	return std::format( "return *({}*)(((std::uintptr_t)this) + {});", m_returnType->get( ), m_ptrDiff );
 }
 
 std::string CCppVirtualTableFunction::get( )
@@ -35,16 +41,16 @@ std::string CCppVirtualTableFunction::get( )
 			if( what == kArgs )
 				str << "arg" << i << ( ( i != ( m_arguments.size( ) - 1 ) ) ? ", " : "" );
 			else if( what == kTypes )
-				str << kTypeCpp[ m_arguments[ i ] ] << ( ( i != ( m_arguments.size( ) - 1 ) ) ? ", " : "" );
+				str << m_arguments[ i ]->get( ) << ( ( i != ( m_arguments.size( ) - 1 ) ) ? ", " : "" );
 		}
 		return str.str( );
 	};
 
 	if( m_arguments.empty( ) )
 		return std::format( "return reinterpret_cast<{}({}*)(void*)>(((*(std::uintptr_t**)(this)))[{}])(this);",
-							kTypeCpp[ m_returnType ], kCallingConvention[ m_callingConvention ], m_index );
+							m_returnType->get( ), kCallingConvention[ m_callingConvention ], m_index );
 	else
 		return std::format( "return reinterpret_cast<{}({}*)(void*, {})>(((*(std::uintptr_t**)(this)))[{}])(this, {});",
-							kTypeCpp[ m_returnType ], kCallingConvention[ m_callingConvention ], compile( kTypes ), m_index,
+							m_returnType->get( ), kCallingConvention[ m_callingConvention ], compile( kTypes ), m_index,
 							compile( kArgs ) );
 }

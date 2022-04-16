@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "../Shared/Typesys.h"
 
@@ -9,9 +10,7 @@ class IFunction
 {
 	public:
 	IFunction( ) = default;
-	virtual ~IFunction( )
-	{
-	}
+	virtual ~IFunction( ) = 0;
 
 	/// <summary>
 	/// Get the function body, empty if none (user defined function)
@@ -20,22 +19,22 @@ class IFunction
 	virtual std::string get( ) = 0;
 
 	public:
-	EType m_returnType{ kVoid };
-	std::vector<EType> m_arguments{ };
+	std::shared_ptr<IType> m_returnType;
+	std::vector<std::shared_ptr<IType>> m_arguments{ };
 };
 
 class IUserDefinedFunction : public IFunction
 {
 	public:
 	IUserDefinedFunction( ) = default;
-	IUserDefinedFunction( EType type, std::vector<EType> &&arguments );
+	IUserDefinedFunction( std::shared_ptr<IType> &&type, std::vector<std::shared_ptr<IType>> &&arguments );
 };
 
 class IGetterFunction : public IFunction
 {
 	public:
 	IGetterFunction( ) = default;
-	IGetterFunction( EType type, std::vector<EType> &&arguments, std::ptrdiff_t ptrDiff );
+	IGetterFunction( std::shared_ptr<IType> &&type, std::vector<std::shared_ptr<IType>> &&arguments, std::ptrdiff_t ptrDiff );
 
 	protected:
 	std::ptrdiff_t m_ptrDiff{ };
@@ -51,7 +50,7 @@ class IVirtualTableFunction : public IFunction
 	};
 
 	IVirtualTableFunction( ) = default;
-	IVirtualTableFunction( EType type, std::vector<EType> &&arguments, ECallingConvention callingConvention, std::uint32_t index );
+	IVirtualTableFunction( std::shared_ptr<IType> &&type, std::vector<std::shared_ptr<IType>> &&arguments, ECallingConvention callingConvention, std::uint32_t index );
 
 	protected:
 	std::uint32_t m_index{ };

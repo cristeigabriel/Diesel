@@ -93,7 +93,7 @@ CParser::CParser( ICodegen const *self, std::ifstream &stream )
 						{
 							auto view = std::string_view{ name.begin( ) + end, name.end( ) };
 							if( view.find_first_not_of( ' ' ) != std::string_view::npos || view.find_first_not_of( '\t' ) != std::string_view::npos )
-								continue;
+								continue; // Error!
 						}
 
 						name = name.substr( iter, end );
@@ -121,7 +121,7 @@ CParser::CParser( ICodegen const *self, std::ifstream &stream )
 			}
 			else
 			{
-
+				// Handle declarations...
 			}
 		}
 

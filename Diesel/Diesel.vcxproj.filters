@@ -48,6 +48,9 @@
     <ClCompile Include="Src\Parser\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Codegen\Cpp\CppType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vendor\dsl-pa\include\cl-utils\history-buffer.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Parser\Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Codegen\Cpp\CppType.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

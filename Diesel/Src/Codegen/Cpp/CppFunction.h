@@ -1,17 +1,14 @@
 #pragma once
 
 #include "../Function.h"
-
-constexpr static char const *kTypeCpp[ kMax ] ={
-	"void",
-	"bool",
-	"int"
-};
+#include "CppType.hpp"
 
 class CCppUserDefinedFunction : public IUserDefinedFunction
 {
 	public:
-	using IUserDefinedFunction::IUserDefinedFunction;
+	//using IUserDefinedFunction::IUserDefinedFunction;
+	CCppUserDefinedFunction( std::shared_ptr<IType> &&type, std::vector<std::shared_ptr<IType>> &&arguments );
+
 	~CCppUserDefinedFunction( ) override = default;
 
 	std::string get( ) override;
